@@ -1,0 +1,44 @@
+{
+  "manifest_version": 2,
+  "name": "Rashid-Thunderbird-Image-Viewer",
+  "description": "Rashid Thunderbird Image Viewer — enlarge inline email images in a popup window.",
+  "version": "3.4.0",
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "rashid-thunderbird-image-viewer@thunderbird.local",
+      "strict_min_version": "91.0"
+    }
+  },
+
+  "icons": { "48": "icons/icon-48.png", "96": "icons/icon-96.png" },
+
+  "permissions": [
+    "messagesRead",
+    "messagesModify",
+    "storage",
+    "tabs",
+    "menus"
+  ],
+
+  "commands": {
+    "view-images": {
+      "suggested_key": { "default": "Ctrl+Shift+V" },
+      "description": "Rashid Thunderbird Image Viewer — enlarge inline email images in a popup window."
+    }
+  },
+
+  "background": {
+    "scripts": ["background/background.js"]
+  },
+
+  "browser_action": {
+    "default_icon": { "48": "icons/icon-48.png" },
+    "default_title": "Rashid-Thunderbird-Image-Viewer"
+  },
+
+  "message_display_action": {
+    "default_icon": { "48": "icons/icon-48.png" },
+    "default_title": "Rashid-Thunderbird-Image-Viewer"
+  }
+}

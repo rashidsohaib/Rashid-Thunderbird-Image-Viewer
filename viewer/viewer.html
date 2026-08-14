@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rashid-Thunderbird-Image-Viewer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0c0e18;
+      --surface: #131622;
+      --border:  rgba(255,255,255,0.07);
+      --text:    #c8d0de;
+      --muted:   #5a6478;
+      --accent:  #4a9eff;
+      --danger:  #ff5252;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    #app { display: flex; flex-direction: column; height: 100vh; }
+
+    /* toolbar */
+    #toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 12px; background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0; gap: 8px; flex-wrap: wrap;
+    }
+    #counter { font-size: 12px; color: var(--muted); min-width: 52px; font-variant-numeric: tabular-nums; }
+    .grp { display: flex; gap: 4px; align-items: center; }
+
+    button {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 30px; min-width: 30px; padding: 0 8px;
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 6px; color: var(--text); font-size: 15px; cursor: pointer;
+      transition: background .12s, border-color .12s, color .12s; white-space: nowrap;
+    }
+    button:hover { background: rgba(74,158,255,.15); border-color: rgba(74,158,255,.35); color: var(--accent); }
+    button:active { transform: scale(.94); }
+    button.danger:hover { background: rgba(255,82,82,.15); border-color: rgba(255,82,82,.35); color: var(--danger); }
+    button:disabled { opacity: .3; cursor: default; pointer-events: none; }
+    #zoomLabel { font-size: 11px; color: var(--muted); min-width: 40px; text-align: center; font-variant-numeric: tabular-nums; }
+
+    /* stage */
+    #stage {
+      flex: 1; overflow: hidden; display: flex; align-items: center;
+      justify-content: center; cursor: grab; position: relative;
+      background-image: repeating-conic-gradient(#181b27 0% 25%, #111420 0% 50%);
+      background-size: 28px 28px;
+    }
+    #stage.panning { cursor: grabbing; }
+    #mainImg {
+      max-width: 100%; max-height: 100%; object-fit: contain; display: block;
+      transform-origin: center center; will-change: transform; pointer-events: none;
+      transition: opacity .15s ease;
+    }
+    #mainImg.loading { opacity: .3; }
+    #spinner { position: absolute; color: var(--muted); font-size: 12px; display: none; }
+    #spinner.on { display: block; }
+
+    /* footer */
+    #footer {
+      padding: 6px 14px; background: var(--surface);
+      border-top: 1px solid var(--border); color: var(--muted); font-size: 11px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      flex-shrink: 0; display: flex; justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="toolbar">
+    <span id="counter">— / —</span>
+    <div class="grp">
+      <button id="bPrev" title="Previous (←)">&#8592;</button>
+      <button id="bNext" title="Next (→)">&#8594;</button>
+    </div>
+    <div class="grp">
+      <button id="bZoomIn"  title="Zoom in (+)">＋</button>
+      <span   id="zoomLabel">100%</span>
+      <button id="bZoomOut" title="Zoom out (−)">－</button>
+      <button id="bReset"   title="Reset (0)" style="font-size:12px">Reset</button>
+      <button id="bFit"     title="Fit to window" style="font-size:12px">Fit</button>
+    </div>
+    <div class="grp">
+      <button id="bSave"  title="Save image" style="font-size:12px">&#8595; Save</button>
+      <button id="bClose" class="danger" title="Close (Esc)">&#10005;</button>
+    </div>
+  </div>
+
+  <div id="stage">
+    <img id="mainImg" alt="" />
+    <div id="spinner">Loading…</div>
+  </div>
+
+  <div id="footer">
+    <span id="fName">—</span>
+    <span id="fDims">—</span>
+  </div>
+</div>
+<script src="viewer.js"></script>
+</body>
+</html>
